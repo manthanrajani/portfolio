@@ -34,33 +34,45 @@ const floatChips = [
   {
     label: "LangChain",
     icon: <SiLangchain className="text-[#1fc9b2]" />,
-    cls: "top-2 left-0 max-lg:top-1 max-lg:left-1 lg:top-[-18px] lg:left-[-26px]",
+    cls: "top-0 left-2 sm:left-4",
     dur: 5.4,
     delay: 0,
   },
   {
     label: "RAG",
     icon: <SiN8N className="text-[#ea4b71]" />,
-    cls: "top-[22%] right-0 max-lg:hidden lg:right-[-34px]",
+    cls: "top-[14%] right-2 sm:right-4 max-lg:hidden",
     dur: 6.2,
     delay: 0.7,
   },
   {
     label: "FastAPI",
     icon: <SiFastapi className="text-[#35f0a8]" />,
-    cls: "bottom-[26%] left-0 max-lg:hidden lg:left-[-40px]",
+    cls: "bottom-[30%] left-2 sm:left-4 max-lg:hidden",
     dur: 5.8,
     delay: 1.3,
   },
   {
     label: "Next.js / React",
     icon: <FaReact className="text-[#39e0ff]" />,
-    cls: "bottom-2 right-0 max-lg:bottom-1 max-lg:right-1 lg:bottom-[-20px] lg:right-[-18px]",
+    cls: "bottom-0 right-2 sm:right-4",
     dur: 6.6,
     delay: 0.4,
   },
-  { label: "Python", icon: <FaPython className="text-[#ffd04f]" />, cls: "top-[48%] left-[-52px] hidden xl:flex", dur: 7, delay: 1.9 },
-  { label: "Node.js", icon: <SiNodedotjs className="text-[#6fcf5a]" />, cls: "top-[-26px] right-[12%] hidden xl:flex", dur: 6, delay: 2.2 },
+  {
+    label: "Python",
+    icon: <FaPython className="text-[#ffd04f]" />,
+    cls: "top-[46%] left-2 hidden xl:flex",
+    dur: 7,
+    delay: 1.9,
+  },
+  {
+    label: "Node.js",
+    icon: <SiNodedotjs className="text-[#6fcf5a]" />,
+    cls: "top-1 right-[22%] hidden xl:flex",
+    dur: 6,
+    delay: 2.2,
+  },
 ];
 
 const codeLines: { nodes: { t: string; c?: string }[]; indent?: number }[] = [
@@ -152,6 +164,81 @@ const codeLines: { nodes: { t: string; c?: string }[]; indent?: number }[] = [
   { nodes: [{ t: "};", c: "text-slate-300" }] },
 ];
 
+const mobileSnapshotRows: { key: string; value: string; valueClass?: string }[] = [
+  { key: "name", value: profile.name },
+  { key: "role", value: profile.role },
+  { key: "base", value: "Surat, Gujarat, IN" },
+  { key: "builds", value: "agents · RAG · SaaS" },
+  { key: "impact", value: "20+ hrs/wk · 80% manual cut", valueClass: "text-[#ff9d5c]" },
+  { key: "voice", value: "1k+ queries/mo", valueClass: "text-[#ff9d5c]" },
+  { key: "status", value: "shipping · available", valueClass: "text-mint" },
+];
+
+const mobileStackChips = [
+  { label: "LangChain", icon: <SiLangchain className="text-[#1fc9b2]" /> },
+  { label: "FastAPI", icon: <SiFastapi className="text-[#35f0a8]" /> },
+  { label: "RAG", icon: <SiN8N className="text-[#ea4b71]" /> },
+  { label: "Next.js", icon: <FaReact className="text-[#39e0ff]" /> },
+  { label: "Python", icon: <FaPython className="text-[#ffd04f]" /> },
+  { label: "Node", icon: <SiNodedotjs className="text-[#6fcf5a]" /> },
+];
+
+/** Compact profile card for viewports under 425px (replaces terminal + floating chips). */
+function HeroMobileSnapshot() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.75, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="relative w-full"
+    >
+      <div className="absolute -inset-3 rounded-2xl bg-[radial-gradient(circle_at_50%_0%,rgba(255,106,43,0.18),transparent_65%)] blur-xl" />
+
+      <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[#0a1020]/95 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.85)] backdrop-blur-xl">
+        <div className="flex items-center gap-2.5 border-b border-white/[0.07] bg-white/[0.03] px-3.5 py-2.5">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          </div>
+          <span className="font-code text-[10px] text-slate-400 truncate">profile.brief</span>
+          <span className="ml-auto shrink-0 font-code text-[9px] text-mint/90">ready</span>
+        </div>
+
+        <div className="px-3.5 py-3 font-code">
+          <p className="mb-3 text-[10px] leading-snug text-slate-500">
+            <span className="text-mint">➜</span> whoami --json
+          </p>
+
+          <dl className="space-y-2">
+            {mobileSnapshotRows.map((row) => (
+              <div key={row.key} className="flex items-start justify-between gap-3 text-[11px] leading-tight">
+                <dt className="shrink-0 text-[#7dd3fc]">{row.key}</dt>
+                <dd className={`min-w-0 text-right ${row.valueClass ?? "text-[#35f0a8]"}`}>{row.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div className="border-t border-white/[0.07] bg-white/[0.02] px-3 py-2.5">
+          <p className="mb-2 font-code text-[9px] uppercase tracking-wider text-slate-500">stack</p>
+          <div className="flex flex-wrap gap-1.5">
+            {mobileStackChips.map((chip) => (
+              <span
+                key={chip.label}
+                className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-[#0d1424]/90 px-2 py-1 text-[10px] font-medium text-slate-200"
+              >
+                <span className="text-[11px] leading-none">{chip.icon}</span>
+                {chip.label}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
 function CodeTerminal() {
   const [visible, setVisible] = useState(0);
   const [started, setStarted] = useState(false);
@@ -171,7 +258,7 @@ function CodeTerminal() {
       initial={{ opacity: 0, y: 44, rotateX: 12 }}
       animate={{ opacity: 1, y: 0, rotateX: 0 }}
       transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="relative mx-auto w-full max-w-[540px] overflow-x-clip px-1 sm:px-0"
+      className="relative mx-auto hidden w-full max-w-[560px] overflow-visible px-4 py-8 min-[425px]:block sm:px-6 sm:py-10"
       style={{ perspective: "1200px" }}
     >
       {/* glow under card */}
@@ -233,7 +320,7 @@ function CodeTerminal() {
           animate={{ y: [0, -12, 0] }}
           transition={{ duration: chip.dur, delay: chip.delay, repeat: Infinity, ease: "easeInOut" }}
         >
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-[#0d1424]/90 px-3.5 py-2 text-xs font-medium text-slate-200 shadow-[0_14px_34px_-10px_rgba(0,0,0,0.8)] backdrop-blur-md">
+          <div className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-[#0d1424]/90 px-3.5 py-2 text-xs font-medium text-slate-200 shadow-[0_14px_34px_-10px_rgba(0,0,0,0.8)] backdrop-blur-md">
             <span className="text-sm">{chip.icon}</span>
             {chip.label}
           </div>
@@ -263,54 +350,55 @@ export default function Hero() {
         mx.set(((e.clientX - rect.left) / rect.width) * 100);
         my.set(((e.clientY - rect.top) / rect.height) * 100);
       }}
-      className="relative min-h-screen flex items-center overflow-hidden pt-28 pb-20"
+      className="relative flex min-h-screen items-center pt-24 pb-16 min-[425px]:pt-28 min-[425px]:pb-20"
     >
-      {/* backgrounds */}
-      <div className="absolute inset-0 bg-grid bg-grid-mask" />
-      <motion.div className="absolute inset-0" style={{ background: spotlight }} />
+      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+        <div className="absolute inset-0 bg-grid bg-grid-mask" />
+        <motion.div className="absolute inset-0" style={{ background: spotlight }} />
 
-      <motion.div
-        className="absolute -top-40 -left-32 h-[34rem] w-[34rem] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(255,106,43,0.28), transparent 65%)", filter: "blur(30px)" }}
-        animate={{ x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.15, 1] }}
-        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute top-1/3 -right-40 h-[36rem] w-[36rem] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(57,224,255,0.18), transparent 65%)", filter: "blur(40px)" }}
-        animate={{ x: [0, -70, 0], y: [0, 50, 0], scale: [1, 1.1, 1] }}
-        transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-[-12rem] left-1/3 h-[28rem] w-[28rem] rounded-full"
-        style={{ background: "radial-gradient(circle, rgba(53,240,168,0.12), transparent 65%)", filter: "blur(40px)" }}
-        animate={{ x: [0, 40, 0], scale: [1, 1.2, 1] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {particles.map((p, i) => (
-        <span
-          key={i}
-          className="particle"
-          style={{
-            top: p.top,
-            left: p.left,
-            width: p.size,
-            height: p.size,
-            animationDuration: `${p.dur}s`,
-            animationDelay: `${p.delay}s`,
-          }}
+        <motion.div
+          className="absolute -top-40 -left-32 h-[34rem] w-[34rem] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(255,106,43,0.28), transparent 65%)", filter: "blur(30px)" }}
+          animate={{ x: [0, 60, 0], y: [0, 40, 0], scale: [1, 1.15, 1] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
         />
-      ))}
+        <motion.div
+          className="absolute top-1/3 -right-40 h-[36rem] w-[36rem] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(57,224,255,0.18), transparent 65%)", filter: "blur(40px)" }}
+          animate={{ x: [0, -70, 0], y: [0, 50, 0], scale: [1, 1.1, 1] }}
+          transition={{ duration: 19, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute bottom-[-12rem] left-1/3 h-[28rem] w-[28rem] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(53,240,168,0.12), transparent 65%)", filter: "blur(40px)" }}
+          animate={{ x: [0, 40, 0], scale: [1, 1.2, 1] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-      <div className="relative mx-auto w-full max-w-7xl px-5 sm:px-8 grid lg:grid-cols-[1.05fr_0.95fr] gap-16 lg:gap-10 items-center">
+        {particles.map((p, i) => (
+          <span
+            key={i}
+            className="particle"
+            style={{
+              top: p.top,
+              left: p.left,
+              width: p.size,
+              height: p.size,
+              animationDuration: `${p.dur}s`,
+              animationDelay: `${p.delay}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 mx-auto grid w-full max-w-7xl items-center gap-10 px-4 min-[425px]:gap-16 min-[425px]:px-5 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 sm:px-8">
         {/* LEFT */}
-        <div>
+        <div className="min-w-0">
           <motion.div
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="inline-flex items-center gap-2.5 rounded-full border border-mint/25 bg-mint/[0.07] px-4 py-2 text-xs sm:text-sm font-medium text-mint"
+            className="inline-flex max-w-full items-center gap-2 rounded-full border border-mint/25 bg-mint/[0.07] px-3 py-1.5 text-[11px] font-medium text-mint min-[425px]:gap-2.5 min-[425px]:px-4 min-[425px]:py-2 min-[425px]:text-xs sm:text-sm"
           >
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full rounded-full bg-mint animate-pulse-dot" />
@@ -323,14 +411,14 @@ export default function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="mt-7 font-code text-sm sm:text-base text-fog"
+            className="mt-5 font-code text-sm text-fog min-[425px]:mt-7 sm:text-base"
           >
             <span className="text-accent">$</span> whoami, hi, I&apos;m
           </motion.p>
 
           <h1 className="mt-2 font-display font-bold tracking-tight leading-[0.95]">
             <motion.span
-              className="block text-[clamp(2.35rem,8.5vw,5.6rem)] text-white"
+              className="block text-[clamp(2rem,8.5vw,5.6rem)] text-white min-[425px]:text-[clamp(2.35rem,8.5vw,5.6rem)]"
               initial={{ y: 90, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
@@ -338,7 +426,7 @@ export default function Hero() {
               MANTHAN
             </motion.span>
             <motion.span
-              className="block text-[clamp(2.35rem,8.5vw,5.6rem)] text-gradient"
+              className="block text-[clamp(2rem,8.5vw,5.6rem)] text-gradient min-[425px]:text-[clamp(2.35rem,8.5vw,5.6rem)]"
               initial={{ y: 90, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
@@ -347,7 +435,7 @@ export default function Hero() {
             </motion.span>
           </h1>
 
-          <div className="mt-5 flex h-8 items-center gap-2 font-code text-base sm:text-xl">
+          <div className="mt-4 flex min-h-8 items-center gap-2 font-code text-sm min-[425px]:mt-5 min-[425px]:text-base sm:text-xl">
             <span className="text-fog">{">"}</span>
             <AnimatePresence mode="wait">
               <motion.span
@@ -370,7 +458,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.55, duration: 0.8 }}
-            className="mt-5 max-w-xl text-[15px] sm:text-base leading-relaxed text-fog"
+            className="mt-4 max-w-xl text-[14px] leading-relaxed text-fog min-[425px]:mt-5 min-[425px]:text-[15px] sm:text-base"
           >
             I design and ship production <span className="text-slate-200 font-medium">AI-powered web applications</span> end-to-end,
             from LLM-backed backends and agentic workflows to RAG pipelines and responsive React/Next.js frontends that drive measurable business impact.
@@ -380,17 +468,17 @@ export default function Hero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 0.8 }}
-            className="mt-9 flex flex-wrap items-center gap-4"
+            className="mt-7 flex flex-col items-stretch gap-3 min-[425px]:mt-9 min-[425px]:flex-row min-[425px]:flex-wrap min-[425px]:items-center min-[425px]:gap-4"
           >
-            <button onClick={openCalendly} className="btn-primary">
+            <button onClick={openCalendly} className="btn-primary w-full justify-center min-[425px]:w-auto">
               <FaRegCalendarCheck className="text-sm" />
               Book a 30-min call
             </button>
-            <a href="#work" className="btn-ghost">
+            <a href="#work" className="btn-ghost w-full justify-center min-[425px]:w-auto">
               View my work
               <FaArrowRight className="text-xs" />
             </a>
-            <div className="flex items-center gap-3 ml-1">
+            <div className="flex items-center justify-center gap-3 min-[425px]:ml-1 min-[425px]:justify-start">
               <a href={profile.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="icon-btn">
                 <FaGithub className="text-lg" />
               </a>
@@ -404,8 +492,11 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT - terminal */}
-        <div className="relative">
+        {/* RIGHT - terminal (425px+) or compact snapshot (<425px) */}
+        <div className="relative min-w-0 overflow-visible">
+          <div className="min-[425px]:hidden">
+            <HeroMobileSnapshot />
+          </div>
           <CodeTerminal />
         </div>
       </div>
